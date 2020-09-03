@@ -3,14 +3,12 @@ import pandas as pd
 import numpy as np
 
 data = pd.read_csv("letter-recognition.data", index_col=False)
-# print(data.head())
 
-labels = data.iloc[:, 0].values.tolist()
-# print(labels[:10])
+labels = data.iloc[:, 0].values.tolist()  # gives us the letters we want to predict on 
 
 values = {"A": 1, "B": 2, "C": 3, "D": 4, "E": 5, "F": 6, "G": 7, "H": 8, "I": 9, "J": 10, "K": 11, "L": 12,
           "M": 13, "N": 14, "O": 15, "P": 16, "Q": 17, "R": 18, "S": 19, "T": 20, "U": 21, "V": 22, "W": 23,
-          "X": 24, "Y": 25, "Z": 26}
+          "X": 24, "Y": 25, "Z": 26}  # we need the data in our model to be numeric so we can do analysis on it 
 
 
 def get_key(dictionary, value):
@@ -19,15 +17,13 @@ def get_key(dictionary, value):
             return key
 
 
-def to_numeric(letters):
+def to_numeric(letters):  # switches letters in dataset to numbers
     new_letters = []
     global values
     for letter in letters:
         new_letters.append(values[letter])
     return new_letters
 
-
-# print(to_numeric(labels)[:10])
 
 labels = to_numeric(labels)
 
@@ -54,7 +50,8 @@ model.compile(optimizer="Adam", loss="sparse_categorical_crossentropy", metrics=
 
 # below loop allows us to run the model many times and save whatever one gives us the best accuracy
 # stops us from having to retrain the model each time we want to predict on new data
-# we could delete this, but it might be helpful to keep in case we feel like retraining the model
+# we could delete this, but it might be helpful to keep in case we feel like retraining the model using different activations or layer setups
+
 """best = 0  
 for n in range(100):
     print(n)
@@ -72,7 +69,7 @@ model = keras.models.load_model("best_model")  # loads the best model we saved
 prediction = model.predict(x_test)
 
 
-def display_predictions(num):
+def display_predictions(num):  # prints out the actual letter and prediction, and tells us what we predicted incorrectly.
     wrong = []
     for i in range(num):
         print(i, ", actual:", get_key(values, y_test[i]), ", prediction:", get_key(values, np.argmax(prediction[i])))
